@@ -24,6 +24,14 @@ const app = new App({
   processBeforeResponse: false,
   customRoutes: [
     {
+      path: "/healthz",
+      method: "GET",
+      handler: (_req, res) => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+      },
+    },
+    {
       path: "/github/webhook",
       method: "POST",
       handler: createWebhookHandler(config, github, claude),

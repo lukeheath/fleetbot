@@ -5,6 +5,7 @@ services:
     plan: starter
     buildCommand: npm install
     startCommand: node app.js
+    healthCheckPath: /healthz
     envVars:
       - key: SLACK_BOT_TOKEN
         sync: false

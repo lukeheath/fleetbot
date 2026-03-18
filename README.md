@@ -102,5 +102,3 @@ npm start
 **In any channel:** `@Fleet how many Windows hosts do we have?`
 
 **In a DM:** Just message the bot directly — no @mention needed.
-
-**Follow-ups:** The bot tracks threads it has participated in and responds to follow-up messages without needing another @mention.

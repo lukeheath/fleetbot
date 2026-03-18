@@ -187,6 +187,15 @@ async function processComment({ prNumber, commentBody, commentId, event, mention
   // Send to Claude for revisions
   console.log("[webhook] Sending revision request to Claude...");
   const proposal = await claude.proposeRevisions(commentBody, currentFiles, pr.title);
+
+  if (proposal.type === "info") {
+    // Informational reply — no file changes, just post the answer
+    console.log("[webhook] Claude returned an informational response");
+    await github.addPullRequestComment(prNumber, `🤖 **Fleet:** ${proposal.text}`);
+    console.log(`[webhook] PR #${prNumber} info reply posted. Done.`);
+    return;
+  }
+
   console.log(`[webhook] Claude proposed ${proposal.changes.length} changes`);
 
   // Validate file paths to prevent directory traversal
@@ -304,6 +313,13 @@ async function handleCheckRun(payload, config, github, claude) {
   // Send to Claude for a fix
   console.log("[ci-fix] Sending CI errors to Claude for auto-fix...");
   const proposal = await claude.proposeCiFix(errorLines, currentFiles, pr.title);
+
+  if (proposal.type === "info") {
+    console.log("[ci-fix] Claude returned info instead of a fix, posting as comment");
+    await github.addPullRequestComment(prNumber, `🤖 **Fleet:** CI check \`${config.ci.checkName}\` failed. I analyzed the error but couldn't produce an automatic fix:\n\n${proposal.text}`);
+    return;
+  }
+
   console.log(`[ci-fix] Claude proposed ${proposal.changes.length} changes`);
 
   // Validate file paths and commit the fix

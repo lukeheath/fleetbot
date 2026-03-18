@@ -24,6 +24,9 @@ const config = {
     checkName: process.env.GITOPS_CI_CHECK_NAME || "fleet-gitops",
     autoFix: process.env.CI_AUTO_FIX !== "false",
   },
+  mcp: {
+    url: process.env.FLEET_MCP_URL || "http://localhost:8080/sse",
+  },
 };
 
 // Validate required env vars

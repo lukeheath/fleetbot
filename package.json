@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "@octokit/rest": "^21.0.0",
     "@slack/bolt": "^4.1.0",
     "diff": "^7.0.0",

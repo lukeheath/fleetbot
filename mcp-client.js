@@ -35,6 +35,12 @@ class McpClient {
     this.client = new Client({ name: "fleetbot", version: "1.0.0" });
     await this.client.connect(transport);
 
+    // Mark disconnected when the transport closes so we can auto-reconnect
+    this.client.onclose = () => {
+      console.log("[mcp] Connection closed, will reconnect on next tool call");
+      this._connected = false;
+    };
+
     const { tools } = await this.client.listTools();
     this.tools = tools;
     this._connected = true;
@@ -68,10 +74,24 @@ class McpClient {
     }
 
     if (!this._connected) {
-      throw new Error("[mcp] Not connected. Call connect() first.");
+      console.log("[mcp] Not connected, attempting to reconnect...");
+      try {
+        await this.connect();
+      } catch (err) {
+        throw new Error(`[mcp] Not connected and reconnect failed: ${err.message}`);
+      }
     }
     console.log(`[mcp] Calling tool: ${name}(${JSON.stringify(args).slice(0, 200)})`);
-    const result = await this.client.callTool({ name, arguments: args });
+    let result;
+    try {
+      result = await this.client.callTool({ name, arguments: args });
+    } catch (err) {
+      // Connection may have dropped mid-call — try one reconnect
+      console.warn(`[mcp] Tool call failed (${err.message}), reconnecting and retrying...`);
+      this._connected = false;
+      await this.connect();
+      result = await this.client.callTool({ name, arguments: args });
+    }
 
     // MCP returns content as an array of content blocks
     const textParts = (result.content || [])

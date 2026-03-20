@@ -2,8 +2,9 @@ const { Client } = require("@modelcontextprotocol/sdk/client/index.js");
 const { SSEClientTransport } = require("@modelcontextprotocol/sdk/client/sse.js");
 
 class McpClient {
-  constructor({ url }) {
+  constructor({ url, authToken }) {
     this.url = url;
+    this.authToken = authToken;
     this.client = null;
     this.tools = [];
     this._localTools = new Map(); // name → { definition, handler }
@@ -27,7 +28,9 @@ class McpClient {
     if (this._connected) return;
 
     console.log(`[mcp] Connecting to ${this.url}...`);
-    const transport = new SSEClientTransport(new URL(this.url));
+    const transport = new SSEClientTransport(new URL(this.url), {
+      requestInit: { headers: { Authorization: `Bearer ${this.authToken}` } },
+    });
 
     this.client = new Client({ name: "fleetbot", version: "1.0.0" });
     await this.client.connect(transport);

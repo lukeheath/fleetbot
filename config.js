@@ -26,6 +26,7 @@ const config = {
   },
   mcp: {
     url: process.env.FLEET_MCP_URL || "http://localhost:8080/sse",
+    authToken: process.env.FLEET_MCP_AUTH_TOKEN,
   },
 };
 
@@ -36,6 +37,7 @@ const required = [
   ["GITHUB_TOKEN", config.github.token],
   ["ANTHROPIC_API_KEY", config.anthropic.apiKey],
   ["GITHUB_WEBHOOK_SECRET", config.webhook.secret],
+  ["FLEET_MCP_AUTH_TOKEN", config.mcp.authToken],
 ];
 
 for (const [name, value] of required) {

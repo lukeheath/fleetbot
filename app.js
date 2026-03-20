@@ -101,7 +101,7 @@ registerHandlers(app, config, github, claude);
   console.log(`  Path: ${config.github.gitopsBasePath}`);
   console.log(`  Model: ${config.anthropic.model}`);
   console.log(`  MCP: ${config.mcp.url}`);
-  console.log(`  Webhook: http://localhost:${config.webhook.port}/github/webhook`);
+  console.log(`  Webhook: /github/webhook (port ${config.webhook.port})`);
   console.log(`  CI auto-fix: ${config.ci.autoFix ? `enabled (check: ${config.ci.checkName})` : "disabled"}`);
   console.log("\nListening for /fleet commands, @mentions, and GitHub webhooks...");
 })();

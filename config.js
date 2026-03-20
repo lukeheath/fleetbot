@@ -14,7 +14,7 @@ const config = {
   },
   anthropic: {
     apiKey: process.env.ANTHROPIC_API_KEY,
-    model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5-20250514",
+    model: process.env.ANTHROPIC_MODEL || "claude-opus-4-6",
   },
   webhook: {
     secret: process.env.GITHUB_WEBHOOK_SECRET,

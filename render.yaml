@@ -33,3 +33,7 @@ services:
         value: fleet-gitops
       - key: CI_AUTO_FIX
         value: "true"
+      - key: FLEET_MCP_URL
+        sync: false
+      - key: FLEET_MCP_AUTH_TOKEN
+        sync: false
